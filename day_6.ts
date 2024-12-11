@@ -57,7 +57,7 @@ function hitsObstruction(floor: Floor, position: Position): boolean {
 
 function getNextPosition(
   direction: Direction,
-  originalPosition: Position
+  originalPosition: Position,
 ): {
   newPosition: Position;
   movement: { row: number; col: number };
@@ -73,7 +73,7 @@ function getNextPosition(
 function getNextMove(
   floor: Floor,
   currentPosition: Position,
-  currentDirection: Direction
+  currentDirection: Direction,
 ): Movement {
   let direction = currentDirection;
   let result = getNextPosition(direction, currentPosition);
@@ -178,5 +178,5 @@ if (import.meta.main) {
       cycles++;
     }
   }
-  console.log("Part 2: ", cycles);
+  console.log("Part 2:", cycles);
 }
