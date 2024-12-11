@@ -158,20 +158,6 @@ function getGuardVisited(floor: Floor): {
   };
 }
 
-function getObstructionAvailablePositions(floor: Floor): Position[] {
-  const positions: Position[] = [];
-  for (let row = 0; row < floor.length; row++) {
-    for (let col = 0; col < floor[row].length; col++) {
-      const character = floor[row][col];
-      if (character === Guard || character === Obstruction) {
-        continue;
-      }
-      positions.push({ row, col });
-    }
-  }
-  return positions;
-}
-
 if (import.meta.main) {
   // const text = await readFile("./day_6_example_data.txt");
   const text = await readFile("./day_6_data.txt");
@@ -180,8 +166,11 @@ if (import.meta.main) {
   console.log("Part 1:", visitedPositions.length);
 
   let cycles = 0;
-  const obstructionPositions = getObstructionAvailablePositions(floor);
-  for (const position of obstructionPositions) {
+  const guardPosition = getStartingPosition(floor, Guard);
+  const possibleObstructionPositions = visitedPositions.filter(
+    (vp) => vp.row !== guardPosition.row || vp.col !== guardPosition.col,
+  );
+  for (const position of possibleObstructionPositions) {
     const cFloor = structuredClone(floor);
     cFloor[position.row][position.col] = Obstruction;
     const { hasCycle } = getGuardVisited(cFloor);
