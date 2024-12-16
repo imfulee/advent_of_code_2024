@@ -1,5 +1,6 @@
 import { assert } from "@std/assert";
 import { readFile } from "./reader.ts";
+import { popHead, popTail } from "./utils.ts";
 
 type TopographicMap = string[][];
 type Coordinate = {
@@ -12,7 +13,7 @@ export function parse(text: string): TopographicMap {
 }
 
 export function getTrailheadCoordinates(
-  topographicMap: TopographicMap
+  topographicMap: TopographicMap,
 ): Coordinate[] {
   const trailheads: Coordinate[] = [];
 
@@ -27,35 +28,9 @@ export function getTrailheadCoordinates(
   return trailheads;
 }
 
-export function popHead<T>(array: readonly T[]): {
-  head: T | null;
-  remainingArray: T[];
-} {
-  if (array.length === 0) {
-    return { head: null, remainingArray: [] };
-  }
-
-  const head = array[0];
-  const remainingArray = array.slice(1);
-  return { head, remainingArray };
-}
-
-export function popTail<T>(array: readonly T[]): {
-  remainingArray: T[];
-  tail: T | null;
-} {
-  if (array.length === 0) {
-    return { tail: null, remainingArray: [] };
-  }
-
-  const tail = array[array.length - 1];
-  const remainingArray = array.slice(0, array.length - 1);
-  return { tail, remainingArray };
-}
-
 export function isPathFound(
   topographicMap: TopographicMap,
-  path: readonly Coordinate[]
+  path: readonly Coordinate[],
 ): boolean {
   if (path.length === 0) {
     return false;
@@ -66,14 +41,14 @@ export function isPathFound(
 
 export function isAllPathsFound(
   topographicMap: TopographicMap,
-  paths: readonly Coordinate[][]
+  paths: readonly Coordinate[][],
 ) {
   return paths.filter((p) => !isPathFound(topographicMap, p)).length === 0;
 }
 
 export function isValidCoordinate(
   coordinate: Coordinate,
-  topographicMap: TopographicMap
+  topographicMap: TopographicMap,
 ): boolean {
   return (
     0 <= coordinate.row &&
@@ -86,11 +61,11 @@ export function isValidCoordinate(
 export function isNextStep(
   from: Coordinate,
   to: Coordinate,
-  topographicMap: TopographicMap
+  topographicMap: TopographicMap,
 ) {
   assert(
     topographicMap[from.row][from.col] !== ".",
-    "from coordinates should not be unwalkable"
+    "from coordinates should not be unwalkable",
   );
 
   if (topographicMap[to.row][to.col] === ".") {
@@ -111,7 +86,7 @@ function _printPath(path: Coordinate[], topographicMap: TopographicMap) {
 
 export function calcPaths(
   topographicMap: TopographicMap,
-  trailheadCoordinate: Coordinate
+  trailheadCoordinate: Coordinate,
 ): Coordinate[][] {
   const directions = [
     { row: 1, col: 0 },
@@ -137,10 +112,10 @@ export function calcPaths(
       col: lastCoordinate.col + d.col,
     }));
     const validSteps = possibleSteps.filter((s) =>
-      isValidCoordinate(s, topographicMap)
+      isValidCoordinate(s, topographicMap),
     );
     const nextSteps = validSteps.filter((s) =>
-      isNextStep(lastCoordinate, s, topographicMap)
+      isNextStep(lastCoordinate, s, topographicMap),
     );
 
     const newPaths = nextSteps.map((s) => [...path, s]);
@@ -174,7 +149,7 @@ if (import.meta.main) {
     // part 2
     const sum = trailheads.reduce(
       (total, trailhead) => total + calcPaths(topographicMap, trailhead).length,
-      0
+      0,
     );
     console.log(sum);
   }
