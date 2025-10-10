@@ -1,4 +1,4 @@
-import { expect } from "jsr:@std/expect/expect";
+import { expect } from "@std/expect";
 import { calcBorders, Border } from "./day_12.ts";
 
 Deno.test("calc borders - only 1 tile", () => {
