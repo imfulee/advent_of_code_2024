@@ -1,10 +1,10 @@
 import { expect } from "jsr:@std/expect";
 import {
-  isNormalValidReport,
-  parse,
   calcValidReports,
   isDampenedValidReport,
-} from "./day_2.ts";
+  isNormalValidReport,
+  parse,
+} from "./day_02.ts";
 
 Deno.test("Parser", () => {
   const testData = `7 6 4 2 1
